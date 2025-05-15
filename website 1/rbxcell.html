@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>RBXCELL.id</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      text-shadow: 0 0 8px rgba(0,0,0,0.7);
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      margin: 30px auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .box {
+      background-color: #e0f7fa;
+      text-align: center;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      user-select: none;
+    }
+
+    .box:hover {
+      background-color: #b2ebf2;
+    }
+
+    .total-box {
+      background-color: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #2c3e50;
+      border: 1px solid #bdc3c7;
+    }
+
+    .confirm-button {
+      background-color: #25D366;
+      color: white;
+      border: none;
+      padding: 14px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 18px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .confirm-button:hover {
+      background-color: #20b858;
+    }
+
+    .gamepass-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f4f4f4;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.3s;
+    }
+
+    .gamepass-item:hover {
+      border-color: #25D366;
+    }
+
+    .gamepass-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .gamepass-item span {
+      margin-top: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    #popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .popup-content button {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-confirm { background: #25D366; color: white; }
+    .btn-cancel { background: #ccc; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>RBXCELL.id</h1>
+  <p>Beli Robux dengan cepat dan aman!</p>
+</header>
+
+<div class="container">
+  <h2>Form Pembelian Robux</h2>
+
+  <label for="username">Username Roblox:</label>
+  <input type="text" id="username" placeholder="Masukkan username Anda" />
+
+  <!-- Avatar akan muncul di sini -->
+  <div id="avatarContainer" style="margin-top: 15px; text-align: center; display: none;">
+    <p>Avatar Roblox Anda:</p>
+    <img id="avatarImage" src="" alt="Avatar Roblox" style="border-radius: 10px; max-width: 150px;" />
+  </div>
+
+  <label for="customRobux">Custom Jumlah Robux:</label>
+  <input type="number" id="customRobux" placeholder="Contoh: 200" min="1" oninput="updateHarga()" />
+  <small>Harga: 100 Robux = Rp10.000</small>
+
+  <div class="total-box" id="rincianBiaya">Rincian Biaya: 0 Robux = Rp0</div>
+
+  <label for="metodePembayaran">Metode Pembayaran:</label>
+  <select id="metodePembayaran">
+    <option value="dana">DANA</option>
+    <option value="ovo">OVO</option>
+    <option value="gopay">GoPay</option>
+    <option value="qris">QRIS</option>
+  </select>
+
+  <div class="dashboard">
+    <div class="box" onclick="pilihCepat(100)">100 Robux</div>
+    <div class="box" onclick="pilihCepat(500)">500 Robux</div>
+    <div class="box" onclick="pilihCepat(1000)">1000 Robux</div>
+    <div class="box" onclick="pilihCepat(1500)">1500 Robux</div>
+  </div>
+
+  <button class="confirm-button" onclick="pembayaranWhatsApp()">Pembayaran via WhatsApp</button>
+
+  <div id="popup">
+    <div class="popup-content" id="popupContent">
+      <p id="popupText"></p>
+      <button class="btn-confirm" id="popupYes">Lanjut</button>
+      <button class="btn-cancel" onclick="document.getElementById('popup').style.display='none'">Batal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function pilihCepat(jumlah) {
+    document.getElementById('customRobux').value = jumlah;
+    updateHarga();
+  }
+
+  function updateHarga() {
+    const jumlah = parseInt(document.getElementById('customRobux').value);
+    const rincianBiaya = document.getElementById('rincianBiaya');
+    if (!isNaN(jumlah) && jumlah > 0) {
+      const hargaPer100 = 10000;
+      const total = Math.ceil((jumlah / 100) * hargaPer100);
+      rincianBiaya.textContent = `Rincian Biaya: ${jumlah} Robux = Rp${total.toLocaleString('id-ID')}`;
+    } else {
+      rincianBiaya.textContent = 'Rincian Biaya: 0 Robux = Rp0';
+    }
+  }
+
+  function pembayaranWhatsApp() {
+    const username = document.getElementById('username').value.trim();
+    const jumlahRobux = parseInt(document.getElementById('customRobux').value);
+
+    if (!username) {
+      alert('Mohon isi username Roblox Anda.');
+      return;
+    }
+    if (!jumlahRobux || jumlahRobux <= 0) {
+      alert('Mohon masukkan jumlah Robux yang valid.');
+      return;
+    }
+
+    const hargaPer100 = 10000;
+    const totalHarga = Math.ceil((jumlahRobux / 100) * hargaPer100);
+    let message = `Halo,saya ingin membeli Robux.\nUsername: ${username}\nJumlah: ${jumlahRobux} Robux.\nTotal Harga: Rp${totalHarga.toLocaleString('id-ID')}`;
+
+    const selectedGamepass = document.querySelector('input[name="gamepass"]:checked');
+    if (selectedGamepass) {
+      const label = selectedGamepass.closest('.gamepass-item');
+      const name = selectedGamepass.value;
+      const image = label.querySelector('img').src;
+      message += `\nGamepass: ${name}`;
+    }
+
+    if (confirm("Apakah Anda yakin ingin melanjutkan ke WhatsApp untuk menyelesaikan pembayaran?")) {
+      const whatsappLink = `https://wa.me/628991580233?text=${encodeURIComponent(message)}`;
+      window.open(whatsappLink, '_blank');
+    }
+  }
+
+  let avatarFetchTimeout;
+
+  document.getElementById('username').addEventListener('input', function () {
+    const username = this.value.trim();
+    clearTimeout(avatarFetchTimeout);
+    avatarFetchTimeout = setTimeout(() => {
+      if (username) {
+        tampilkanAvatar(username);
+      } else {
+        document.getElementById('avatarContainer').style.display = 'none';
+      }
+    }, 500);
+  });
+
+  async function tampilkanAvatar(username) {
+    const avatarContainer = document.getElementById('avatarContainer');
+    const avatarImage = document.getElementById('avatarImage');
+
+    try {
+      const resUser = await fetch("https://users.roblox.com/v1/usernames/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ usernames: [username] })
+      });
+
+      const dataUser = await resUser.json();
+      const userId = dataUser.data[0]?.id;
+
+      if (!userId) {
+        avatarContainer.style.display = 'none';
+        return;
+      }
+
+      const resAvatar = await fetch(`https://thumbnails.roblox.com/v1/users/avatar?userIds=${userId}&size=150x150&format=Png&isCircular=false`);
+      const dataAvatar = await resAvatar.json();
+      const avatarUrl = dataAvatar.data[0]?.imageUrl;
+
+      if (avatarUrl) {
+        avatarImage.src = avatarUrl;
+        avatarContainer.style.display = 'block';
+      } else {
+        avatarContainer.style.display = 'none';
+      }
+    } catch (error) {
+      console.error("Gagal mengambil avatar:", error);
+      avatarContainer.style.display = 'none';
+    }
+  }
+
+  updateHarga();
+</script>
+
+</body>
+</html>
